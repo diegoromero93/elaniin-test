@@ -25,10 +25,12 @@ class AuthController extends Controller {
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request){
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|string|min:6',
         ]);
+
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
@@ -37,6 +39,7 @@ class AuthController extends Controller {
         if (! $token = auth()->attempt($validator->validated())) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+
 
         return $this->createNewToken($token);
     }
@@ -47,17 +50,21 @@ class AuthController extends Controller {
      * @return \Illuminate\Http\JsonResponse
      */
     public function register(Request $request) {
+
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|between:2,100',
-            'username' => 'required|string|between:2,100',
+            'username' => 'required|string|between:2,100|unique:users',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|min:6',
-            'phone_number' => 'required|numeric'
+            'phone_number' => 'required|numeric',
+            'birthdate' => 'required|date'
         ]);
 
         if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
+            return response()->json($validator->errors(), 400);
         }
+
 
         $user = User::create(array_merge(
             $validator->validated(),

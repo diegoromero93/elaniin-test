@@ -50,8 +50,6 @@ class AuthController extends Controller {
      * @return \Illuminate\Http\JsonResponse
      */
     public function register(Request $request) {
-
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|between:2,100',
             'username' => 'required|string|between:2,100|unique:users',

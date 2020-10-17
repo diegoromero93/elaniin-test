@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
 use Illuminate\Support\Facades\Password;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,10 @@ Route::group([
 
 
 });
+
+Route::resource('product', ProductController::class, ['only' => [
+        'index', 'store', 'show', 'update', 'destroy'
+    ]]);
 
 Route::post('forgot-password', [ForgotPasswordController::class, 'forgotPasswordEmail'])->middleware(['guest'])->name('password.email');
 

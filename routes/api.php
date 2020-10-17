@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ForgotPasswordController;
+use Illuminate\Support\Facades\Password;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,3 +34,10 @@ Route::group([
 
 
 });
+
+Route::post('forgot-password', [ForgotPasswordController::class, 'forgotPasswordEmail'])->middleware(['guest'])->name('password.email');
+
+
+Route::get('/reset-password/{token}', function ($token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->middleware(['guest'])->name('password.reset');

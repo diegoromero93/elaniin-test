@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Throwable;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -39,5 +40,22 @@ class Handler extends ExceptionHandler
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         return response()->json(['error' => 'Unauthenticated.'], 401);
+    }
+
+    public function render($request, Throwable $e)
+    {
+        if ($this->isHttpException($e)) {
+
+            $statusCode = $e->getStatusCode();
+
+            switch ($statusCode) {
+
+                case '404':
+                    return response()->json([
+                        'message' => 'api not found',
+                    ], 404);
+            }
+        }
+        return parent::render($request, $e);
     }
 }

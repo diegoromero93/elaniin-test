@@ -82,4 +82,11 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
         'phone_number' => 'required|numeric',
         'birthdate' => 'required|date_format:Y-m-d'
     );
+
+    public static $update_rules = array(
+        'name' => 'string|between:2,100',
+        'password' => 'string|confirmed|min:6',
+        'phone_number' => 'numeric',
+        'birthdate' => 'date_format:Y-m-d'
+    );
 }

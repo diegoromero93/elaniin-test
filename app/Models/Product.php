@@ -32,4 +32,12 @@ class Product extends Model
         'image' => 'required|image:jpeg,png,jpg,gif,svg|max:2048'
     );
 
+    public static $update_rules = array(
+        'name' => 'string|between:2,100',
+        'qty' => 'numeric|min:0|not_in:0',
+        'amount' => 'numeric|min:0|not_in:0',
+        'description' => 'min:5',
+        'image' => 'image:jpeg,png,jpg,gif,svg|max:2048'
+    );
+
 }

@@ -95,14 +95,12 @@ class ProductController extends Controller
             return $this->recordNotFound();
         }
 
-        $validator = Validator::make($request->all(), [
-            'sku' => 'string|between:8,14|unique:products,sku,'.$product->id.',id',
-            'name' => 'string|between:2,100',
-            'qty' => 'numeric|min:0|not_in:0',
-            'amount' => 'numeric|min:0|not_in:0',
-            'description' => 'min:5',
-            'image' => 'image:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
+        $validator = Validator::make($request->all(), array_merge(
+            [
+                'sku' => 'string|between:8,14|unique:products,sku,'.$product->id.',id'
+            ],
+            Product::$update_rules
+        ));
 
         if($validator->fails()){
             return response()->json($validator->errors(), 400);

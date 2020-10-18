@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Validator;
-use Illuminate\Auth\SessionGuard;
 
 
 class UserController extends Controller
@@ -84,7 +83,31 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $user = User::find($id);
+        if ( ! $user)
+        {
+            return $this->recordNotFound();
+        }
 
+        $validator = Validator::make($request->all(), array_merge(
+                [
+                    'username' => 'required|string|between:2,100|unique:users,username,'.$user->id.',id',
+                    'email' => 'required|string|email|max:100|unique:users,email,'.$user->id.',id',
+                ],
+                User::$update_rules)
+        );
+        if($validator->fails()){
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user->fill($request->all());
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return response()->json([
+            'message' => 'User successfully updated',
+            'product' => $user
+        ]);
     }
 
     /**

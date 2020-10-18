@@ -36,9 +36,14 @@ Route::group([
 
 });
 
-Route::resource('product', ProductController::class, ['only' => [
+Route::group([
+    'middleware' => 'auth:api',
+
+], function ($router) {
+    Route::resource('product', ProductController::class, ['only' => [
         'index', 'store', 'show', 'update', 'destroy'
     ]]);
+});
 
 Route::post('forgot-password', [ForgotPasswordController::class, 'forgotPasswordEmail'])->middleware(['guest'])->name('password.email');
 

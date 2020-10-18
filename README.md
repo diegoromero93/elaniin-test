@@ -6,7 +6,7 @@ Hello Elaniin evaluator, this is a small project for the requirements that you'v
 ### Requirements
 
 - PHP > 7.3
-- composer
+- Composer
 - MySQL 5.7 (Please configure on .env file)
 - Email configuration (Please configure on .env file)
 

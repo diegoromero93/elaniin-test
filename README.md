@@ -22,6 +22,9 @@ after that, follow the next steps
 ```
 composer install
 php artisan migrate
+php artisan db:seed
+php artisan storage:link
+
 ```
 
 You can find a live version on the following link:

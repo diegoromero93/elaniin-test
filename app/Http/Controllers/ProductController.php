@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -42,16 +43,22 @@ class ProductController extends Controller
             'qty' => 'required|numeric|min:0|not_in:0',
             'amount' => 'required|numeric|min:0|not_in:0',
             'description' => 'required|min:5',
-            'image' => 'required'
+            'image' => 'required|image:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
         if($validator->fails()){
             return response()->json($validator->errors(), 400);
         }
 
+        $uploadFolder = 'products';
+        $image = $request->file('image');
+        $image_uploaded_path = $image->store($uploadFolder, 'public');
+
         $product = Product::create( array_merge(
             $validator->validated(),
-            ['sku' => strtoupper($request->sku)]
+            [   'sku' => strtoupper($request->sku),
+                'image' =>  Storage::disk('public')->url($image_uploaded_path)
+            ]
         ));
 
         return response()->json([
@@ -95,13 +102,13 @@ class ProductController extends Controller
             return $this->recordNotFound();
         }
 
-
         $validator = Validator::make($request->all(), [
-            'sku' => 'string|between:8,14|unique:products',
+            'sku' => 'string|between:8,14|unique:products,sku,'.$product->id.',id',
             'name' => 'string|between:2,100',
             'qty' => 'numeric|min:0|not_in:0',
             'amount' => 'numeric|min:0|not_in:0',
-            'description' => 'min:5'
+            'description' => 'min:5',
+            'image' => 'image:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
         if($validator->fails()){
@@ -109,7 +116,18 @@ class ProductController extends Controller
         }
 
         $input = $request->all();
-        $product->fill($input)->save();
+        $image_url = $product->image;
+        $product->fill($input);
+
+        if($request->has('image')){
+            Storage::disk('public')->delete('products/'. basename($image_url));
+            $uploadFolder = 'products';
+            $image = $request->file('image');
+            $image_uploaded_path = $image->store($uploadFolder, 'public');
+            $product->image = Storage::disk('public')->url($image_uploaded_path);
+        }
+
+        $product->save();
 
         return response()->json([
             'message' => 'Product successfully updated',
@@ -132,11 +150,16 @@ class ProductController extends Controller
             return $this->recordNotFound();
         }
 
-        $product->delete();
+        if(Storage::disk('public')->delete('products/'. basename($product->image))){
+            $product->delete();
+            return response()->json([
+                'message' => 'Product successfully deleted'
+            ]);
+        }
 
         return response()->json([
-            'message' => 'Product successfully deleted'
-        ]);
+            'message' => 'Could not delete product'
+        ], 500);
     }
 
     private function recordNotFound(){

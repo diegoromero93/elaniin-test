@@ -3,6 +3,12 @@
 
 Hello Elaniin evaluator, this is a small project for the requirements that you've sent me.
 
+### Used tech
+
+- Laravel 8 (Deployed on AWS)
+- MySQL 5.7 (Google cloud platform)
+- JWT Auth (Bearer token)
+
 ### Requirements
 
 - PHP > 7.3

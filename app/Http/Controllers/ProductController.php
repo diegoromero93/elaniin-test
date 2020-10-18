@@ -37,14 +37,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'sku' => 'required|string|between:8,14|unique:products',
-            'name' => 'required|string|between:2,100',
-            'qty' => 'required|numeric|min:0|not_in:0',
-            'amount' => 'required|numeric|min:0|not_in:0',
-            'description' => 'required|min:5',
-            'image' => 'required|image:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
+        $validator = Validator::make($request->all(), Product::$creation_rules);
 
         if($validator->fails()){
             return response()->json($validator->errors(), 400);

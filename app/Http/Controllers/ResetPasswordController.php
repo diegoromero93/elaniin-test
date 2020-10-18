@@ -26,7 +26,7 @@ class ResetPasswordController extends Controller
         }
 
         $reset_password_status = Password::reset($request->all(), function ($user, $password) {
-            $user->password = $password;
+            $user->password = bcrypt($password);
             $user->save();
         });
 

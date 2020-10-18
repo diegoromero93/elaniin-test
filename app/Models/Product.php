@@ -23,4 +23,13 @@ class Product extends Model
         'image'
     ];
 
+    public static $creation_rules = array(
+        'sku' => 'required|string|between:8,14|unique:products',
+        'name' => 'required|string|between:2,100',
+        'qty' => 'required|numeric|min:0|not_in:0',
+        'amount' => 'required|numeric|min:0|not_in:0',
+        'description' => 'required|min:5',
+        'image' => 'required|image:jpeg,png,jpg,gif,svg|max:2048'
+    );
+
 }

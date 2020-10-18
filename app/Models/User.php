@@ -72,4 +72,14 @@ class User extends Authenticatable implements JWTSubject, CanResetPassword
     {
         $this->notify(new CustomResetPassword($token));
     }
+
+
+    public static $creation_rules = array(
+        'name' => 'required|string|between:2,100',
+        'username' => 'required|string|between:2,100|unique:users',
+        'email' => 'required|string|email|max:100|unique:users',
+        'password' => 'required|string|confirmed|min:6',
+        'phone_number' => 'required|numeric',
+        'birthdate' => 'required|date_format:Y-m-d'
+    );
 }

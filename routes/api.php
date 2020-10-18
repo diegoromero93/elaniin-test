@@ -4,9 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
-use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +42,9 @@ Route::group([
 
 ], function ($router) {
     Route::resource('product', ProductController::class, ['only' => [
+        'index', 'store', 'show', 'update', 'destroy'
+    ]]);
+    Route::resource('user', UserController::class, ['only' => [
         'index', 'store', 'show', 'update', 'destroy'
     ]]);
 });

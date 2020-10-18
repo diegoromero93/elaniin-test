@@ -70,8 +70,8 @@ class CustomResetPassword extends Notification
         return (new MailMessage)
             ->subject(Lang::get('Elaniin Test - Reset Password Notification'))
             ->line(Lang::get('You are receiving this email because we received a password reset request for your account.'))
-            ->line(Lang::get('Bescause I developed a RESTFUL API please make a post request with the following token, and add password and password_confirmation parameters'))
-            ->line(Lang::get( 'token' . $this->token))
+            ->line(Lang::get('Bescause I developed a RESTFUL API please make a post request with the following token, and add password and password_confirmation parameters (see postman parameters)'))
+            ->line(Lang::get( 'token: ' . $this->token))
             ->line(Lang::get('This password reset token will expire in :count minutes.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
             ->line(Lang::get('If you did not request a password reset, no further action is required.'));
     }

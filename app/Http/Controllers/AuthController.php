@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\User;
@@ -62,7 +61,6 @@ class AuthController extends Controller {
         if($validator->fails()){
             return response()->json($validator->errors(), 400);
         }
-
 
         $user = User::create(array_merge(
             $validator->validated(),

@@ -141,16 +141,21 @@ class ProductController extends Controller
             return $this->recordNotFound();
         }
 
-        if(Storage::disk('public')->delete('products/'. basename($product->image))){
-            $product->delete();
-            return response()->json([
-                'message' => 'Product successfully deleted'
-            ]);
+        $exist = Storage::disk('public')->has('products/'. basename($product->image));
+        if($exist){
+            if(!Storage::disk('public')->delete('products/'. basename($product->image))){
+                return response()->json([
+                    'message' => 'Could not delete product'
+                ], 500);
+            }
         }
 
+        $product->delete();
         return response()->json([
-            'message' => 'Could not delete product'
-        ], 500);
+            'message' => 'Product successfully deleted'
+        ]);
+
+
     }
 
     private function recordNotFound(){

@@ -17,7 +17,7 @@ Hello Elaniin evaluator, this is a small project for the requirements that you'v
 - Email configuration (Please configure on .env file)
 
 
-Please clone this repository and configure the database on the .env file
+Please clone this repository and configure the database and email on the .env file
 after that, follow the next steps
 ```
 composer install
